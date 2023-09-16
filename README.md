@@ -1,6 +1,6 @@
-# git-line-commit README
+# git-line-blame README
 
-This is the README for your extension "git-line-commit". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "git-line-blame". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

@@ -50,7 +50,7 @@ const annotationDecoration: vscode.TextEditorDecorationType =
   });
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Extension "git-line-commit" has activated.');
+  console.log('Extension "git-line-blame" has activated.');
 
   context.subscriptions.push(
     vscode.window.onDidChangeTextEditorSelection((e) => {

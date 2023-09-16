@@ -1,22 +1,29 @@
 {
-  "name": "git-line-commit",
-  "displayName": "git-line-commit",
-  "description": "Display inline information of the last commit that edited the currently selected line in the editor",
+  "name": "git-line-blame",
+  "displayName": "git-line-blame",
+  "description": "Display inline information in the text editor about the latest commit that edited the currently selected line",
+  "publisher": "carlthome",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.78.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "SCM Providers"
   ],
+  "keywords": [
+    "git",
+    "blame"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carlthome/git-line-blame.git"
+  },
+  "contributes": {},
   "activationEvents": [
     "*"
   ],
   "main": "./out/extension.js",
-  "contributes": {},
-  "extensionDependencies": [
-    "vscode.git"
-  ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
