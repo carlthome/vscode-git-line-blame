@@ -40,7 +40,6 @@ function relativeTimePassed(now: number, past: number): string {
     return "Around " + Math.round(elapsed / msYears) + " year(s) ago";
   }
 }
-("Around 3 day(s) ago");
 
 const annotationDecoration: vscode.TextEditorDecorationType =
   vscode.window.createTextEditorDecorationType({
