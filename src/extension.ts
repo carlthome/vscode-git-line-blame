@@ -87,7 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         const elapsed = relativeTimePassed(
           Date.now(),
-          parseInt(fields["author-time"])
+          parseInt(fields["author-time"]) * 1000
         );
 
         // TODO If same username, write "You" instead of username.
