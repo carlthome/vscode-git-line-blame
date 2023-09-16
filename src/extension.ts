@@ -91,9 +91,6 @@ export function activate(context: vscode.ExtensionContext) {
           parseInt(fields["author-time"]) * 1000
         );
 
-        // TODO If same username, write "You" instead of username.
-        // TODO If dirty, set summary to "Uncommitted changes".
-        // TODO If close in time, set summary to "now".
         const message = `${fields.author}, ${elapsed} • ${fields.summary}`;
 
         const hoverMessage = Object.entries(fields)
