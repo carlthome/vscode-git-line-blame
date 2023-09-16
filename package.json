@@ -4,6 +4,7 @@
   "description": "Display inline information in the text editor about the latest commit that edited the currently selected line",
   "publisher": "carlthome",
   "version": "0.1.1",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.78.0"
   },
