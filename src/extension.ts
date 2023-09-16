@@ -25,20 +25,29 @@ function relativeTimePassed(now: number, past: number): string {
 
   const elapsed = now - past;
 
+  let value = 0;
+  let unit = "";
   if (elapsed < msMinutes) {
-    Math.round(elapsed / 1000);
-    return Math.round(elapsed / 1000) + " seconds ago";
+    value = Math.round(elapsed / 1000);
+    unit = "second";
   } else if (elapsed < msHours) {
-    return Math.round(elapsed / msMinutes) + " minutes ago";
+    value = Math.round(elapsed / msMinutes);
+    unit = "minute";
   } else if (elapsed < msDays) {
-    return Math.round(elapsed / msHours) + " hours ago";
+    value = Math.round(elapsed / msHours);
+    unit = "hour";
   } else if (elapsed < msMonths) {
-    return "Around " + Math.round(elapsed / msDays) + " day(s) ago";
+    value = Math.round(elapsed / msDays);
+    unit = "day";
   } else if (elapsed < msYears) {
-    return "Around " + Math.round(elapsed / msMonths) + " month(s) ago";
+    value = Math.round(elapsed / msMonths);
+    unit = "month";
   } else {
-    return "Around " + Math.round(elapsed / msYears) + " year(s) ago";
+    value = Math.round(elapsed / msYears);
+    unit = "year";
   }
+  const plural = value > 1 ? "s" : "";
+  return `${value} ${unit}${plural} ago`;
 }
 
 const annotationDecoration: vscode.TextEditorDecorationType =
