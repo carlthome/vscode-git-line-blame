@@ -2,43 +2,45 @@ import * as vscode from "vscode";
 import * as cp from "child_process";
 
 function parseGitBlamePorcelain(blame: string): { [key: string]: string } {
+  const lines = blame.trim().split("\n");
+  lines[0] = `commit ${lines[0]}`;
+  lines[lines.length - 1] = `line ${lines[lines.length - 1]}`;
   const fields = Object.fromEntries(
-    blame
-      .trim()
-      .split("\n")
-      .map((line: string) => {
-        const words = line.split(" ");
-        const key = words[0];
-        const value = words.slice(1).join(" ");
-        return [key, value];
-      })
+    lines.map((line: string) => {
+      const words = line.split(" ");
+      const key = words[0];
+      const value = words.slice(1).join(" ");
+      return [key, value];
+    })
   );
   return fields;
 }
 
 function relativeTimePassed(now: number, past: number): string {
-  var msMinutes = 60 * 1000;
-  var msHours = msMinutes * 60;
-  var msDays = msHours * 24;
-  var msMonths = msDays * 30;
-  var msYears = msDays * 365;
+  const msMinutes = 60 * 1000;
+  const msHours = msMinutes * 60;
+  const msDays = msHours * 24;
+  const msMonths = msDays * 30;
+  const msYears = msDays * 365;
 
-  var diff = now - past;
+  const elapsed = now - past;
 
-  if (diff < msMinutes) {
-    return Math.round(diff / 1000) + " seconds ago";
-  } else if (diff < msHours) {
-    return Math.round(diff / msMinutes) + " minutes ago";
-  } else if (diff < msDays) {
-    return Math.round(diff / msHours) + " hours ago";
-  } else if (diff < msMonths) {
-    return "Around " + Math.round(diff / msDays) + " days ago";
-  } else if (diff < msYears) {
-    return "Around " + Math.round(diff / msMonths) + " months ago";
+  if (elapsed < msMinutes) {
+    Math.round(elapsed / 1000);
+    return Math.round(elapsed / 1000) + " seconds ago";
+  } else if (elapsed < msHours) {
+    return Math.round(elapsed / msMinutes) + " minutes ago";
+  } else if (elapsed < msDays) {
+    return Math.round(elapsed / msHours) + " hours ago";
+  } else if (elapsed < msMonths) {
+    return "Around " + Math.round(elapsed / msDays) + " day(s) ago";
+  } else if (elapsed < msYears) {
+    return "Around " + Math.round(elapsed / msMonths) + " month(s) ago";
   } else {
-    return "Around " + Math.round(diff / msYears) + " years ago";
+    return "Around " + Math.round(elapsed / msYears) + " year(s) ago";
   }
 }
+("Around 3 day(s) ago");
 
 const annotationDecoration: vscode.TextEditorDecorationType =
   vscode.window.createTextEditorDecorationType({
@@ -94,7 +96,10 @@ export function activate(context: vscode.ExtensionContext) {
         // TODO If dirty, set summary to "Uncommitted changes".
         // TODO If close in time, set summary to "now".
         const message = `${fields.author}, ${elapsed} • ${fields.summary}`;
-        const hoverMessage = JSON.stringify(fields, null, 2);
+
+        const hoverMessage = Object.entries(fields)
+          .map((entry) => `- **${entry[0]}**: \`${entry[1]}\``)
+          .join("\n");
 
         const renderOptions = {
           after: {
