@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/carlthome/git-line-blame.git"
+    "url": "https://github.com/carlthome/vscode-git-line-blame.git"
   },
   "contributes": {},
   "activationEvents": [
