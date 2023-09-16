@@ -21,7 +21,7 @@
   },
   "contributes": {},
   "activationEvents": [
-    "*"
+    "workspaceContains:.git"
   ],
   "main": "./out/extension.js",
   "scripts": {
