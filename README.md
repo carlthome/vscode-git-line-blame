@@ -18,4 +18,4 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ### Why not just use GitLens instead?
 
-GitLens is an excellent extension but I found it overly complicated for my needs, with many features I didn't need. It's also frustrating that the extension keeps pushing for its paid version. In contrast, this extension will always be free and open source software (see [licencse](./LICENSE)), and will never do more than just provide the line blame information.
+GitLens is an excellent extension but I found it overly complicated for my needs, with many features I didn't need. It's also frustrating that the extension keeps pushing for its paid version. In contrast, this extension will always be free and open source software (see [license](./LICENSE)), and will never do more than just provide the line blame information.
