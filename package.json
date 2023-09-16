@@ -3,7 +3,7 @@
   "displayName": "Git Line Blame",
   "description": "Display inline information in the text editor about the latest commit that edited the currently selected line",
   "publisher": "carlthome",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engines": {
     "vscode": "^1.78.0"
   },
