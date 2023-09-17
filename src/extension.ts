@@ -95,12 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
           0
         );
 
-        const elapsed = relativeTimePassed(
-          Date.now(),
-          parseInt(fields["author-time"]) * 1000
-        );
-
-        const message = `${fields.author}, ${elapsed} • ${fields.summary}`;
+        const message = formatMessage(fields);
 
         const hoverMessage = Object.entries(fields)
           .map((entry) => `- **${entry[0]}**: \`${entry[1]}\``)
@@ -131,4 +126,17 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-export function deactivate() {}
+function formatMessage(fields: Record<string, string>): string {
+  const isCommitted = fields["author"] !== "Not Committed Yet";
+  if (!isCommitted) {
+    return 'Not committed yet';
+  }
+  const elapsed = relativeTimePassed(
+    Date.now(),
+    parseInt(fields["author-time"]) * 1000
+  );
+
+  return `${fields.author}, ${elapsed} • ${fields.summary}`;
+}
+
+export function deactivate() { }
