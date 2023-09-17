@@ -7,7 +7,7 @@ on:
       - created
 
 jobs:
-  build:
+  test:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
@@ -24,8 +24,23 @@ jobs:
         if: runner.os == 'Linux'
       - run: npm test
         if: runner.os != 'Linux'
+
+  publish:
+    needs: test
+    environment:
+      name: Visual Studio Marketplace
+      url: https://marketplace.visualstudio.com/items?itemName=carlthome.git-line-blame
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - run: npm install
       - name: Publish
-        if: success() && startsWith(github.ref, 'refs/tags/') && matrix.os == 'ubuntu-latest'
+        if: startsWith(github.ref, 'refs/tags/')
         run: npm run deploy
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
