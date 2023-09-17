@@ -1,59 +1,16 @@
 import * as vscode from "vscode";
 import * as cp from "child_process";
 
-function parseGitBlamePorcelain(blame: string): { [key: string]: string } {
-  const lines = blame.trim().split("\n");
-  lines[0] = `commit ${lines[0]}`;
-  lines[lines.length - 1] = `line ${lines[lines.length - 1]}`;
-  const fields = Object.fromEntries(
-    lines.map((line: string) => {
-      const words = line.split(" ");
-      const key = words[0];
-      const value = words.slice(1).join(" ");
-      return [key, value];
-    })
-  );
-  return fields;
-}
-
-function relativeTimePassed(now: number, past: number): string {
-  const msMinutes = 60 * 1000;
-  const msHours = msMinutes * 60;
-  const msDays = msHours * 24;
-  const msMonths = msDays * 30;
-  const msYears = msDays * 365;
-
-  const elapsed = now - past;
-
-  let value = 0;
-  let unit = "";
-  if (elapsed < msMinutes) {
-    value = Math.round(elapsed / 1000);
-    unit = "second";
-  } else if (elapsed < msHours) {
-    value = Math.round(elapsed / msMinutes);
-    unit = "minute";
-  } else if (elapsed < msDays) {
-    value = Math.round(elapsed / msHours);
-    unit = "hour";
-  } else if (elapsed < msMonths) {
-    value = Math.round(elapsed / msDays);
-    unit = "day";
-  } else if (elapsed < msYears) {
-    value = Math.round(elapsed / msMonths);
-    unit = "month";
-  } else {
-    value = Math.round(elapsed / msYears);
-    unit = "year";
-  }
-  const plural = value > 1 ? "s" : "";
-  return `${value} ${unit}${plural} ago`;
-}
+import {
+  parseGitBlamePorcelain,
+  formatMessage,
+  formatHoverMessage,
+} from "./lib";
 
 const annotationDecoration: vscode.TextEditorDecorationType =
   vscode.window.createTextEditorDecorationType({
     after: {
-      margin: "0 0 0 3em",
+      margin: "0 0 0 6em",
       textDecoration: "none",
     },
     rangeBehavior: vscode.DecorationRangeBehavior.ClosedOpen,
@@ -87,19 +44,15 @@ export function activate(context: vscode.ExtensionContext) {
         const blame = data.toString();
 
         const fields = parseGitBlamePorcelain(blame);
+        const message = formatMessage(fields);
+        const hoverMessage = formatHoverMessage(fields);
 
         const range = new vscode.Range(
           activeLine.lineNumber,
           activeLine.text.length,
           activeLine.lineNumber,
-          0
+          activeLine.text.length + message.length
         );
-
-        const message = formatMessage(fields);
-
-        const hoverMessage = Object.entries(fields)
-          .map((entry) => `- **${entry[0]}**: \`${entry[1]}\``)
-          .join("\n");
 
         const renderOptions = {
           after: {
@@ -125,18 +78,3 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 }
-
-function formatMessage(fields: Record<string, string>): string {
-  const isUncommitted = fields["author"] === "Not Committed Yet";
-  if (isUncommitted) {
-    return 'Not committed yet';
-  }
-  const elapsed = relativeTimePassed(
-    Date.now(),
-    parseInt(fields["author-time"]) * 1000
-  );
-
-  return `${fields.author}, ${elapsed} • ${fields.summary}`;
-}
-
-export function deactivate() { }
