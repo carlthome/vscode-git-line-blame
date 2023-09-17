@@ -21,7 +21,7 @@ npm run test
 
 ### Release a new version
 
-Create a release by `gh release create` and fill in the details. Make sure the package version matches the chosen git tag as per "v{major.minor.patch}.
+Create a release by `gh release create` and fill in the details. Make sure the package version matches the chosen git tag as per `"v{major.minor.patch}"`.
 
 ## FAQ
 
