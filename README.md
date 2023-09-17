@@ -15,8 +15,14 @@ Simply install the latest version from the [Visual Studio Marketplace](https://m
 First, if you're new to VS Code extension development, skim through [CONTRIBUTING.md](./CONTRIBUTING.md) first.
 
 ```sh
+# Install package in the working directory
 npm install
-npm run test
+
+# (Windows & MacOS) Run unit tests
+npm test
+
+# (Linux) Prepend this command with `xvfb-run -a` when running on Linux.
+xvfb-run -a npm test
 ```
 
 ### Release a new version
