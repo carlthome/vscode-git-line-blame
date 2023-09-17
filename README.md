@@ -10,9 +10,18 @@ This extension is small on purpose and doesn't come with any settings. It will a
 
 Simply install the latest version from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=carlthome.git-line-blame). Releases are made from [GitHub Actions](https://github.com/carlthome/vscode-git-line-blame/releases).
 
-## Contribute
+## Develop
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+First, if you're new to VS Code extension development, skim through [CONTRIBUTING.md](./CONTRIBUTING.md) first.
+
+```sh
+npm install
+npm run test
+```
+
+### Release a new version
+
+Create a release by `gh release create` and fill in the details. Make sure the package version matches the chosen git tag as per "v{major.minor.patch}.
 
 ## FAQ
 
