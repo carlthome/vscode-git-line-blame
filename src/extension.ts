@@ -35,9 +35,9 @@ export function activate(context: vscode.ExtensionContext) {
       const line = activeLine.lineNumber;
       const command = "git";
       const args = ["blame", "--porcelain", `-L${line + 1},+1`, file.fsPath];
-      const workspaceFolder =
-        vscode.workspace.getWorkspaceFolder(file)?.uri.path;
-      const options = { cwd: workspaceFolder };
+      const workspaceFolder = vscode.workspace.getWorkspaceFolder(file);
+      const workspaceFolderPath = workspaceFolder?.uri.fsPath;
+      const options = { cwd: workspaceFolderPath };
       const cmd = cp.spawn(command, args, options);
 
       cmd.stdout.on("data", (data) => {
