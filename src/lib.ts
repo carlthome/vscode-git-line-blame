@@ -62,8 +62,9 @@ export function formatMessage(fields: Record<string, string>): string {
 }
 
 export function formatHoverMessage(fields: Record<string, string>): string {
+  const header = "| Key | Value |\n| :-- | :-- |\n";
   const message = Object.entries(fields)
-    .map((entry) => `- **${entry[0]}**: \`${entry[1]}\``)
+    .map(([k, v]) => `| ${k} | \`${v}\` |`)
     .join("\n");
-  return message;
+  return header + message;
 }
