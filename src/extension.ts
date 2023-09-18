@@ -7,14 +7,12 @@ import {
   formatHoverMessage,
 } from "./lib";
 
-const annotationDecoration: vscode.TextEditorDecorationType =
-  vscode.window.createTextEditorDecorationType({
-    after: {
-      margin: "0 0 0 6em",
-      textDecoration: "none",
-    },
-    rangeBehavior: vscode.DecorationRangeBehavior.ClosedOpen,
-  });
+const decorationType = vscode.window.createTextEditorDecorationType({
+  after: {
+    textDecoration: "none; opacity: 0.25;",
+    margin: "0 0 0 6em",
+  },
+});
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "git-line-blame" has activated.');
@@ -56,12 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         const renderOptions = {
           after: {
-            backgroundColor: "none",
-            color: new vscode.ThemeColor("editor.foreground"),
             contentText: message,
-            fontWeight: "normal",
-            fontStyle: "normal",
-            textDecoration: "none; opacity: 0.25; position: absolute;",
           },
         };
 
@@ -73,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
           },
         ];
 
-        activeEditor.setDecorations(annotationDecoration, decorations);
+        activeEditor.setDecorations(decorationType, decorations);
       });
     })
   );
