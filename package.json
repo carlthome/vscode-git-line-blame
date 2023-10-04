@@ -17,6 +17,10 @@
     "git",
     "blame"
   ],
+  "bugs": {
+    "url": "https://github.com/carlthome/vscode-git-line-blame/issues"
+  },
+  "homepage": "https://github.com/carlthome/vscode-git-line-blame",
   "repository": {
     "type": "git",
     "url": "https://github.com/carlthome/vscode-git-line-blame.git"
