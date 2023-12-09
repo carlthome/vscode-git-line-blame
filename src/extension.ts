@@ -29,14 +29,24 @@ export function activate(context: vscode.ExtensionContext) {
         activeEditor.selection.active.line
       );
 
-      const file = activeEditor.document.uri;
+      const { uri: file, isDirty } = activeEditor.document;
       const line = activeLine.lineNumber;
       const command = "git";
       const args = ["blame", "--porcelain", `-L${line + 1},+1`, file.fsPath];
+
+      if (isDirty) {
+        args.push("--content", "-");
+      }
+
       const workspaceFolder = vscode.workspace.getWorkspaceFolder(file);
       const workspaceFolderPath = workspaceFolder?.uri.fsPath;
       const options = { cwd: workspaceFolderPath };
       const cmd = cp.spawn(command, args, options);
+
+      if (isDirty) {
+        cmd.stdin.write(activeEditor.document.getText());
+        cmd.stdin.end();
+      }
 
       cmd.stdout.on("data", (data) => {
         const blame = data.toString();
