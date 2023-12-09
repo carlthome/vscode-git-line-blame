@@ -55,10 +55,16 @@ export function formatMessage(fields: Record<string, string>): string {
     parseInt(fields["author-time"]) * 1000
   );
   const isUncommitted = fields["author"] === "Not Committed Yet";
-  const message = isUncommitted
-    ? "Not committed yet"
-    : `${fields.author}, ${elapsed} • ${fields.summary}`;
-  return message;
+  const isUnsaved = fields["author"] === "External file (--contents)";
+  const defaultMessage = `${fields.author}, ${elapsed} • ${fields.summary}`;
+
+  if (isUncommitted) {
+    return "Not committed yet";
+  } else if (isUnsaved) {
+    return "Unsaved changes";
+  } else {
+    return defaultMessage;
+  }
 }
 
 export function formatHoverMessage(fields: Record<string, string>): string {
