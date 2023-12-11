@@ -14,73 +14,72 @@ const decorationType = vscode.window.createTextEditorDecorationType({
   },
 });
 
-export function activate(context: vscode.ExtensionContext) {
-  console.log('Extension "git-line-blame" has activated.');
+function showDecoration(e: { readonly textEditor: vscode.TextEditor }) {
+  const editor = e.textEditor;
+  const document = editor.document;
+  const activeLine = document.lineAt(editor.selection.active.line);
+  const { uri: file, isDirty } = document;
 
-  const showDecoration = (e: { readonly textEditor: vscode.TextEditor }) => {
-    const activeEditor = vscode.window.activeTextEditor;
-    if (activeEditor === undefined || activeEditor !== e.textEditor) {
-      vscode.window.showErrorMessage("No active text editor or incorrect one");
-      return;
-    }
+  const command = "git";
+  const n = activeLine.lineNumber;
+  const args = ["blame", "--porcelain", `-L${n + 1},+1`, file.fsPath];
 
-    const activeLine = activeEditor.document.lineAt(
-      activeEditor.selection.active.line
+  if (isDirty) {
+    args.push("--content", "-");
+  }
+
+  const workspaceFolder = vscode.workspace.getWorkspaceFolder(file);
+  const workspaceFolderPath = workspaceFolder?.uri.fsPath;
+  const options = { cwd: workspaceFolderPath };
+  const cmd = cp.spawn(command, args, options);
+
+  if (isDirty) {
+    cmd.stdin.write(editor.document.getText());
+    cmd.stdin.end();
+  }
+
+  cmd.stdout.on("data", (data) => {
+    const blame = data.toString();
+
+    const fields = parseGitBlamePorcelain(blame);
+    const message = formatMessage(fields);
+    const hoverMessage = formatHoverMessage(fields);
+
+    const range = new vscode.Range(
+      activeLine.lineNumber,
+      activeLine.text.length,
+      activeLine.lineNumber,
+      activeLine.text.length + message.length
     );
 
-    const { uri: file, isDirty } = activeEditor.document;
-    const line = activeLine.lineNumber;
-    const command = "git";
-    const args = ["blame", "--porcelain", `-L${line + 1},+1`, file.fsPath];
+    const renderOptions = {
+      after: {
+        contentText: message,
+      },
+    };
 
-    if (isDirty) {
-      args.push("--content", "-");
-    }
+    const decorations = [
+      {
+        range: range,
+        hoverMessage: hoverMessage,
+        renderOptions: renderOptions,
+      },
+    ];
 
-    const workspaceFolder = vscode.workspace.getWorkspaceFolder(file);
-    const workspaceFolderPath = workspaceFolder?.uri.fsPath;
-    const options = { cwd: workspaceFolderPath };
-    const cmd = cp.spawn(command, args, options);
+    editor.setDecorations(decorationType, decorations);
+  });
+}
 
-    if (isDirty) {
-      cmd.stdin.write(activeEditor.document.getText());
-      cmd.stdin.end();
-    }
-
-    cmd.stdout.on("data", (data) => {
-      const blame = data.toString();
-
-      const fields = parseGitBlamePorcelain(blame);
-      const message = formatMessage(fields);
-      const hoverMessage = formatHoverMessage(fields);
-
-      const range = new vscode.Range(
-        activeLine.lineNumber,
-        activeLine.text.length,
-        activeLine.lineNumber,
-        activeLine.text.length + message.length
-      );
-
-      const renderOptions = {
-        after: {
-          contentText: message,
-        },
-      };
-
-      const decorations = [
-        {
-          range: range,
-          hoverMessage: hoverMessage,
-          renderOptions: renderOptions,
-        },
-      ];
-
-      activeEditor.setDecorations(decorationType, decorations);
-    });
-  };
-
+export function activate(context: vscode.ExtensionContext) {
+  console.log('Extension "git-line-blame" has activated.');
   context.subscriptions.push(
     vscode.window.onDidChangeTextEditorSelection(showDecoration),
-    vscode.window.onDidChangeTextEditorVisibleRanges(showDecoration)
+    vscode.window.onDidChangeTextEditorVisibleRanges(showDecoration),
+    vscode.workspace.onDidSaveTextDocument((e) => {
+      const editor = vscode.window.activeTextEditor;
+      if (editor !== undefined && e === editor.document) {
+        showDecoration({ textEditor: editor });
+      }
+    })
   );
 }
