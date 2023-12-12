@@ -15,6 +15,15 @@ export function parseGitBlamePorcelain(blame: string): {
   return fields;
 }
 
+export function formatTimeValue(value: string) {
+  const date = new Date(parseInt(value) * 1000);
+
+  return {
+    dateString: date.toISOString(),
+    timeAgo: relativeTimePassed(Date.now(), date.getTime()),
+  };
+}
+
 export function relativeTimePassed(now: number, past: number): string {
   const msMinutes = 60 * 1000;
   const msHours = msMinutes * 60;
@@ -50,13 +59,10 @@ export function relativeTimePassed(now: number, past: number): string {
 }
 
 export function formatMessage(fields: Record<string, string>): string {
-  const elapsed = relativeTimePassed(
-    Date.now(),
-    parseInt(fields["author-time"]) * 1000
-  );
+  const { timeAgo } = formatTimeValue(fields["author-time"]);
   const isUncommitted = fields["author"] === "Not Committed Yet";
   const isUnsaved = fields["author"] === "External file (--contents)";
-  const defaultMessage = `${fields.author}, ${elapsed} • ${fields.summary}`;
+  const defaultMessage = `${fields.author}, ${timeAgo} • ${fields.summary}`;
 
   if (isUncommitted) {
     return "Not committed yet";
@@ -70,7 +76,15 @@ export function formatMessage(fields: Record<string, string>): string {
 export function formatHoverMessage(fields: Record<string, string>): string {
   const header = "| Key | Value |\n| :-- | :-- |\n";
   const message = Object.entries(fields)
-    .map(([k, v]) => `| ${k} | \`${v}\` |`)
+    .map(([k, v]) => {
+      if (k === "author-time" || k === "committer-time") {
+        const { dateString, timeAgo } = formatTimeValue(v);
+
+        v = `${dateString} (${timeAgo})`;
+      }
+
+      return `| ${k} | \`${v}\` |`;}
+    )
     .join("\n");
   return header + message;
 }
