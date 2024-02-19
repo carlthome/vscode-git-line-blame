@@ -40,16 +40,16 @@
     "deploy": "vsce publish"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
-    "@types/vscode": "^1.78.0",
-    "@typescript-eslint/eslint-plugin": "^6.4.1",
-    "@typescript-eslint/parser": "^6.4.1",
-    "@vscode/test-electron": "^2.3.4",
-    "@vscode/vsce": "^2.21.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.86.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.23.0",
     "eslint": "^8.47.0",
     "glob": "^10.3.10",
-    "mocha": "^10.2.0",
-    "typescript": "^5.1.6"
+    "mocha": "^10.3.0",
+    "typescript": "^5.3.3"
   }
 }
