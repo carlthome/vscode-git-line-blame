@@ -81,6 +81,14 @@ export function formatMessage(
 }
 
 export function formatHoverMessage(fields: Record<string, string>): string {
+  // Leave hover message empty if there is no commit.
+  const notCommitted = fields["author"] === "Not Committed Yet";
+  const notSaved = fields["author"] === "External file (--contents)";
+  if (notCommitted || notSaved) {
+    return "";
+  }
+
+  // Format the hover message by collecting commit information.
   const header = "| Key | Value |\n| :-- | :-- |\n";
   const message = Object.entries(fields)
     .map(([k, v]) => {
