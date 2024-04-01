@@ -58,10 +58,17 @@ export function relativeTimePassed(now: number, past: number): string {
   return `${value} ${unit}${plural} ago`;
 }
 
-export function formatMessage(fields: Record<string, string>): string {
+export function formatMessage(
+  fields: Record<string, string>,
+  gitUser: string
+): string {
   const { timeAgo } = formatTimeValue(fields["author-time"]);
   const isUncommitted = fields["author"] === "Not Committed Yet";
   const isUnsaved = fields["author"] === "External file (--contents)";
+  const isUser = fields.author === gitUser;
+  if (isUser) {
+    fields.author = "You";
+  }
   const defaultMessage = `${fields.author}, ${timeAgo} • ${fields.summary}`;
 
   if (isUncommitted) {
@@ -83,8 +90,8 @@ export function formatHoverMessage(fields: Record<string, string>): string {
         v = `${dateString} (${timeAgo})`;
       }
 
-      return `| ${k} | \`${v}\` |`;}
-    )
+      return `| ${k} | \`${v}\` |`;
+    })
     .join("\n");
   return header + message;
 }

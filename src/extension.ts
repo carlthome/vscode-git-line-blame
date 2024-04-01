@@ -38,11 +38,13 @@ function showDecoration(e: { readonly textEditor: vscode.TextEditor }) {
     cmd.stdin.end();
   }
 
+  const gitUser = cp.execSync("git config user.name").toString().trim();
+
   cmd.stdout.on("data", (data) => {
     const blame = data.toString();
 
     const fields = parseGitBlamePorcelain(blame);
-    const message = formatMessage(fields);
+    const message = formatMessage(fields, gitUser);
     const hoverMessage = formatHoverMessage(fields);
 
     const range = new vscode.Range(
