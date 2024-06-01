@@ -38,7 +38,7 @@ function showDecoration(e: { readonly textEditor: vscode.TextEditor }) {
     cmd.stdin.end();
   }
 
-  const gitUser = cp.execSync("git config user.name").toString().trim();
+  const gitUser = cp.execSync("git config user.name").toString().trim() || "John Doe";
 
   cmd.stdout.on("data", (data) => {
     const blame = data.toString();
