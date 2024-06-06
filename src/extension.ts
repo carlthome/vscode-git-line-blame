@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as cp from "child_process";
+import { throttle } from "throttle-debounce";
 
 import {
   parseGitBlamePorcelain,
@@ -74,13 +75,14 @@ function showDecoration(e: { readonly textEditor: vscode.TextEditor }) {
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "git-line-blame" has activated.');
+  let showDecorationThrottled = throttle(100, showDecoration);
   context.subscriptions.push(
-    vscode.window.onDidChangeTextEditorSelection(showDecoration),
-    vscode.window.onDidChangeTextEditorVisibleRanges(showDecoration),
+    vscode.window.onDidChangeTextEditorSelection(showDecorationThrottled),
+    vscode.window.onDidChangeTextEditorVisibleRanges(showDecorationThrottled),
     vscode.workspace.onDidSaveTextDocument((e) => {
       const editor = vscode.window.activeTextEditor;
       if (editor !== undefined && e === editor.document) {
-        showDecoration({ textEditor: editor });
+        showDecorationThrottled({ textEditor: editor });
       }
     })
   );
