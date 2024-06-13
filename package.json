@@ -46,14 +46,14 @@
     "@types/mocha": "^10.0.6",
     "@types/node": "20.x",
     "@types/throttle-debounce": "^5.0.2",
-    "@types/vscode": "^1.78.0",
-    "@typescript-eslint/eslint-plugin": "^7.4.0",
-    "@typescript-eslint/parser": "^7.4.0",
-    "@vscode/test-electron": "^2.3.9",
-    "@vscode/vsce": "^2.24.0",
-    "eslint": "^8.47.0",
-    "glob": "^10.3.12",
+    "@types/vscode": "^1.90.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "@vscode/test-electron": "^2.4.0",
+    "@vscode/vsce": "^2.27.0",
+    "eslint": "^9.4.0",
+    "glob": "^10.4.1",
     "mocha": "^10.4.0",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   }
 }
