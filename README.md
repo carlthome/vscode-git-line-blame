@@ -29,8 +29,9 @@ xvfb-run -a npm test
 
 ### Release a new version
 
-1. Update the version in `package.json` according to [semver](https://semver.org/) (e.g. `npm version minor` for a new feature).
-1. Update the `CHANGELOG.md` with the new version and changes.
+1. Update and commit the `CHANGELOG.md` with the new version and changes according to [semver](https://semver.org/)
+1. `npm version minor` (or `major` or `patch`)
+1. `git push`
 1. `git push --tags`
 1. Submit a new release by `gh release create v$(npm pkg get version | xargs)` and fill in the details.
 
