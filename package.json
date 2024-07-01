@@ -40,7 +40,7 @@
     "deploy": "vsce publish"
   },
   "dependencies": {
-    "throttle-debounce": "^5.0.0"
+    "throttle-debounce": "^5.0.2"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
