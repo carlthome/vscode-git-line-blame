@@ -1,3 +1,7 @@
+# Deprecated: This functionality is now builtin within VS Code directly
+
+Check out https://code.visualstudio.com/updates/v1_97#_git-blame-information for more information.
+
 # Git Line Blame
 
 Visual Studio Code extension that displays inline information in the text editor about the latest commit that edited the currently selected line.
